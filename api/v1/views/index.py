@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 """index.py to connect to API"""
 from api.v1.views import app_views
-from flask import Flask, Blueprint, jsonify
+from flask import jsonify
 
 
-@app_views.route('/status', strict_slashes=False)
+@app_views.route('/status', methods=['GET'])
 def status():
-    """Status"""
     return jsonify({"status": "OK"})
