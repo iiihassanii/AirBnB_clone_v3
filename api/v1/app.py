@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Flask"""
-from flask import Flask
+from flask import Flask, make_response, jsonify
 from models import storage
 from api.v1.views import app_views
 import os
@@ -13,6 +13,12 @@ app.register_blueprint(app_views)
 @app.teardown_appcontext
 def teardown_db(exception):
     storage.close()
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    """Error 40404040404"""
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 if __name__ == "__main__":
