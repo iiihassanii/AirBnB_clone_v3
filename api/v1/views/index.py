@@ -5,6 +5,6 @@ from flask import Flask, Blueprint, jsonify
 
 
 @app_views.route('/status', strict_slashes=False)
-def hbnbStatus():
-    """hbnbStatus"""
+def status():
+    """Status"""
     return jsonify({"status": "OK"})
