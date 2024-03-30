@@ -90,7 +90,7 @@ class DBStorage:
     def count(self, cls=None):
         """cls: class (optional)"""
         total = 0
-        if type(cls) == str and cls in classes:
+        if type(cls) is str and cls in classes:
             cls = classes[cls]
             total = self.__session.query(cls).count()
         elif cls is None:
