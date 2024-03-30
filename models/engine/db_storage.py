@@ -80,18 +80,20 @@ class DBStorage:
         cls: class
         id: string representing the object ID
         """
-        if cls and id is not None and cls in classes.values():
+        """if cls and id is not None and cls in classes.values():
             result = self.__session.query(cls).filter(cls.id == id).first()
             return result
+        else:
+            return None"""
+        if cls and id:
+            tempo = cls, __name__ + "." + id
+            count = self.all(cls)
+            for key in count:
+                if key == tempo:
+                    return count[key]
         else:
             return None
 
     def count(self, cls=None):
         """cls: class (optional)"""
-        total = 0
-        if cls in classes.values():
-            total = self.__session.query(cls).count()
-        elif cls is None:
-            for cls_name in classes.values():
-                total += self.__session.query(cls_name).count()
-        return total
+        return (len(self.all(cls)))
