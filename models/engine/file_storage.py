@@ -81,7 +81,8 @@ class FileStorage:
             return None
 
     def count(self, cls=None):
-        """cls: class (optional)"""
+        """cls: class (optional)
+        thx"""
         total = 0
         if cls is not None and cls in classes.values():
             total = len(self.all(cls))
