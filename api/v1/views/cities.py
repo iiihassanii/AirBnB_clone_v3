@@ -13,6 +13,8 @@ from models.state import State
 def get_city_state(state_id):
     """list of city"""
     state = storage.get(State, state_id)
+    if state is None:
+        return abort(404)
     cities = [city.to_dict() for city in state.cities]
     return jsonify(cities)
 
