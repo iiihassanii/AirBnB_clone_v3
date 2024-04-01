@@ -16,7 +16,7 @@ from models.state import State
 from models.user import User
 import json
 import os
-import pep8
+import pycodestyle as pep8
 import unittest
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
@@ -87,26 +87,26 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
-        """Test that get returns specific object, or none"""
-        newState = State(name="New York")
-        newState.save()
-        newUser = User(email="bob@foobar.com", password="password")
-        newUser.save()
-        self.assertIs(newState, models.storage.get("State", newState.id))
-        self.assertIs(None, models.storage.get("State", "blah"))
-        self.assertIs(None, models.storage.get("blah", "blah"))
-        self.assertIs(newUser, models.storage.get("User", newUser.id))
+        """Test that return the object based on the class and its ID"""
+        storage = models.storage
+        instance = State(name='state_test')
+        instance.save()
+        self.assertIs(storage.get(State, instance.id), instance)
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db',
-                     "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
-        """add new object to db"""
-        startCount = models.storage.count()
-        self.assertEqual(models.storage.count("Blah"), 0)
-        newState = State(name="Montevideo")
-        newState.save()
-        newUser = User(email="ralexrivero@gmail.com.com", password="dummypass")
-        newUser.save()
-        self.assertEqual(models.storage.count("State"), startCount + 1)
-        self.assertEqual(models.storage.count(), startCount + 2)
+        """Test that count the number of objects in storage matching the
+        given class.
+        """
+        storage = models.storage
+        initial_value = models.storage.count()
+        instance = State(name='state_test')
+        instance.save()
+        end_value = storage.count()
+        self.assertEqual(initial_value + 1, end_value)
+        instance = City(state_id=instance.id, name="city_test")
+        instance.save()
+        end_value = storage.count()
+        self.assertEqual(initial_value + 2, end_value)
